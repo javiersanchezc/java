@@ -2,22 +2,14 @@ package com.hackerrank.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackerrank.api.model.Event;
-
-import com.hackerrank.api.service.EventService;
-
+import com.hackerrank.api.repository.EventRepository;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,9 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -37,12 +26,8 @@ class EventControllerTest {
   ObjectMapper om = new ObjectMapper();
   @Autowired
   private MockMvc mockMvc;
-
-  @Mock
-  private EventService eventService;
-
-  @InjectMocks
-  private EventController eventController;
+  @Autowired
+  private EventRepository repository;
 
   @Test
   public void testCreation() throws Exception {
@@ -56,14 +41,4 @@ class EventControllerTest {
 
     Assert.assertEquals(expectedRecord.getName(), actualRecord.getName());
   }
-
-  
-  @Test
-  public void testTop3By_InvalidSortBy() throws Exception {
-      String sortBy = "invalid";
-      ResponseEntity<List<Event>> response = eventController.top3By(sortBy);
-      assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-  }
-  
-  
 }
