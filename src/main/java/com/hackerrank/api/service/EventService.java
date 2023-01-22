@@ -14,4 +14,8 @@ public interface EventService {
   List<Event> top3By(String by);
 
   Integer totalBy(String by);
+
+  List<Event> getTopThreeEvents(String sortBy);
+
+  double getTotalByField(String field);
 }

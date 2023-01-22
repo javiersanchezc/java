@@ -6,6 +6,8 @@ import com.hackerrank.api.repository.EventRepository;
 import com.hackerrank.api.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -34,16 +36,62 @@ public class DefaultEventService implements EventService {
 
   @Override
   public Event getEventById(Long id) {
-    return null;
+    return eventRepository.findById(id).orElse(null);
   }
 
   @Override
   public List<Event> top3By(String by) {
-    return null;
+    List<Event> events = eventRepository.findAll();
+    if (by.equals("cost")) {
+        events.sort(Comparator.comparingDouble(Event::getCost));
+    } else if (by.equals("duration")) {
+        events.sort(Comparator.comparingLong(Event::getDuration));
+    }
+    return events.subList(0, Math.min(3, events.size()));
   }
 
   @Override
   public Integer totalBy(String by) {
-    return null;
+    List<Event> events = eventRepository.findAll();
+    double total = 0;
+    if (by.equals("cost")) {
+        for (Event event : events) {
+            total += event.getCost();
+        }
+    } else if (by.equals("duration")) {
+        for (Event event : events) {
+            total += event.getDuration();
+        }
+    }
+    return (int) total;
   }
+
+  @Override
+  public List<Event> getTopThreeEvents(String sortBy) {
+    List<Event> events = eventRepository.findAll();
+    if (sortBy.equals("cost")) {
+        events.sort(Comparator.comparingDouble(Event::getCost));
+    } else {
+        events.sort(Comparator.comparingLong(Event::getDuration));
+    }
+    return events.subList(0, Math.min(3, events.size()));
+}
+
+  @Override
+  public double getTotalByField(String field) {
+    List<Event> events = eventRepository.findAll();
+    double total = 0;
+    if (field.equals("cost")) {
+        for (Event event : events) {
+            total += event.getCost();
+        }
+    } else if (field.equals("duration")) {
+        for (Event event : events) {
+            total += event.getDuration();
+        }
+    }
+    return total;
+}
+
+
 }
