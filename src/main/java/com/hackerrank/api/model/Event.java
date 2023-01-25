@@ -29,4 +29,10 @@ public class Event implements Serializable {
   private String location;
   private Integer cost;
   private Integer duration;
+
+
+  public Event(int i, String s, double v, int i1) {
+  }
+
+
 }
